@@ -1,7 +1,6 @@
 import { Container } from '@/components/layout'
 import { Button } from "@/components/ui"
-import { Check, CheckCircle, Clock12, CreativeCommons, Notebook, PlusCircle } from 'lucide-react'
-import React from 'react'
+import { CheckCircle, Clock12, Notebook, PlusCircle } from 'lucide-react'
 
 export function Home() {
 
