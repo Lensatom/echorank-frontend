@@ -33,14 +33,14 @@ export function Home() {
         <h2 className='text-xl font-bold'>Hello, Jayden</h2>
       </div>
 
-      <Container className='relative col-span-6 bg-purple-900 text-white rounded-xl overflow-hidden'>
+      <Container className='relative col-span-6 bg-blue-900 text-white rounded-xl overflow-hidden'>
         <div>
           <h3 className='text-lg font-bold'>Make Fairer Decisions</h3>
           <p className='mt-1 text-xs text-gray-300 w-1/2'>
             EchoRank uses instant runoff voting to ensure that every voice is heard. Make decisions that truly reflect the will of the group.
           </p>
         </div>
-        <div className="absolute h-[400px] w-1/3 right-0 -top-[100px] bg-purple-100 rounded-l-full border-16 border-r-0 !border-purple-300">
+        <div className="absolute h-[400px] w-1/3 right-0 -top-[100px] bg-blue-100 rounded-l-full border-16 border-r-0 !border-blue-300">
         </div>
         <Button size="sm" className="bg-white text-black mt-4 !text-xs">Create a Form now</Button>
       </Container>
@@ -70,9 +70,9 @@ export function Home() {
                   <div className='flex flex-col gap-1 mt-1'>
                     <p className='text-[10px] text-gray-500'>{form.percentageComplete}% complete - {form.questionCount} Sections</p>
                     <div className='h-1 w-full rounded-full bg-gray-200'>
-                      <div className='h-1 rounded-full bg-purple-500' style={{ width: `${form.percentageComplete}%` }} />
+                      <div className='h-1 rounded-full bg-blue-500' style={{ width: `${form.percentageComplete}%` }} />
                     </div>
-                    <Button size="sm" className='!text-[10px] !px-2 !py-1 !mt-2 !bg-purple-100 !text-purple-700 !hover:bg-purple-200 !hover:text-purple-800'>Continue</Button>
+                    <Button size="sm" className='!text-[10px] !px-2 !py-1 !mt-2 !bg-blue-100 !text-blue-700 !hover:bg-blue-200 !hover:text-blue-800'>Continue</Button>
                   </div>
                 </Container>
               ))}
