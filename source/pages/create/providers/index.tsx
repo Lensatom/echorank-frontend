@@ -1,0 +1,114 @@
+"use client"
+
+import { usePathname, useSearchParams } from 'next/navigation'
+import React, { useEffect, useState, useRef, useCallback } from 'react'
+import { CreatePollContext, ICreatePoll } from '../context'
+import { draftUtils } from '../utils/draftUtils'
+
+export function CreatePollProvider({ children }: { children: React.ReactNode }) {
+  const [pollData, setPollData] = useState<ICreatePoll | null>(null)
+  const [isNamed, setIsNamed] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+  const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const isSavingRef = useRef(false)
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+
+  const pollId = pathname.split('/').pop()
+  const id = searchParams.get('id')
+  const mode = searchParams.get('mode')
+  
+  const actualPollId = id || (pollId && pollId !== 'create' ? pollId : null)
+
+  useEffect(() => {
+    const loadPollData = async () => {
+      console.log('Loading poll data for ID:', actualPollId)
+      setIsLoading(true)
+      
+      if (actualPollId) {
+        const existingPoll = draftUtils.loadPoll(actualPollId)
+        if (existingPoll) {
+          console.log('Found existing poll:', existingPoll.name)
+          setPollData(existingPoll)
+          setIsNamed(true)
+          setIsLoading(false)
+          return
+        } else {
+          console.log('No existing poll found for ID:', actualPollId)
+        }
+      }
+      
+      console.log('No poll ID or poll not found, showing naming form')
+      setPollData(null)
+      setIsNamed(false)
+      setIsLoading(false)
+    }
+
+    loadPollData()
+  }, [actualPollId])
+
+  const savePollData = useCallback((pollToSave: ICreatePoll) => {
+    if (isSavingRef.current) return
+    
+    isSavingRef.current = true
+    const updatedPoll = {
+      ...pollToSave,
+      lastModified: new Date().toISOString()
+    }
+    
+    draftUtils.savePoll(updatedPoll)
+    setPollData(updatedPoll)
+    isSavingRef.current = false
+  }, [])
+
+  useEffect(() => {
+    if (!pollData || !isNamed || isSavingRef.current) return
+
+    if (saveTimeoutRef.current) {
+      clearTimeout(saveTimeoutRef.current)
+    }
+
+    saveTimeoutRef.current = setTimeout(() => {
+      console.log('Auto-saving poll:', pollData.name)
+      savePollData(pollData)
+    }, 500)
+
+    return () => {
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current)
+      }
+    }
+  }, [pollData?.sections, isNamed, savePollData])
+
+  const handlePollNamed = async (pollName: string) => {
+    const newPoll = draftUtils.createNewPoll(pollName)
+    console.log('Creating new poll:', newPoll)
+    
+    setPollData(newPoll)
+    setIsNamed(true)
+    
+    draftUtils.savePoll(newPoll)
+    console.log('Poll saved to localStorage')
+    
+    await new Promise(resolve => setTimeout(resolve, 100))
+    
+    if (typeof window !== 'undefined') {
+      const newUrl = `${window.location.pathname}?id=${newPoll.id}`
+      console.log('Updating URL to:', newUrl)
+      window.history.replaceState({}, '', newUrl)
+    }
+  }
+
+  return (
+    <CreatePollContext.Provider value={{ 
+      pollData, 
+      setPollData, 
+      isNamed, 
+      setIsNamed,
+      handlePollNamed,
+      isLoading
+    }}>
+      {children}
+    </CreatePollContext.Provider>
+  )
+}
