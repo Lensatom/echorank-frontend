@@ -15,7 +15,7 @@ function CreatePollForm() {
     throw new Error('CreatePollForm must be used within CreatePollProvider')
   }
   
-  const { pollData, setPollData, isNamed, handlePollNamed, isLoading } = context
+  const { pollData, setPollData, isNamed, handlePollNamed, handleDraftSelected, isLoading } = context
 
   const handleAddNewSection = () => {
     const newSection: IPollSection = {

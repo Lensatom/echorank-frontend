@@ -99,6 +99,28 @@ export function CreatePollProvider({ children }: { children: React.ReactNode }) 
     }
   }
 
+  const handleDraftSelected = async (pollId: string) => {
+    console.log('Loading draft:', pollId)
+    setIsLoading(true)
+    
+    const existingPoll = draftUtils.loadPoll(pollId)
+    if (existingPoll) {
+      console.log('Draft loaded:', existingPoll.name)
+      setPollData(existingPoll)
+      setIsNamed(true)
+      
+      if (typeof window !== 'undefined') {
+        const newUrl = `${window.location.pathname}?id=${pollId}`
+        console.log('Updating URL to:', newUrl)
+        window.history.replaceState({}, '', newUrl)
+      }
+    } else {
+      console.error('Draft not found:', pollId)
+    }
+    
+    setIsLoading(false)
+  }
+
   return (
     <CreatePollContext.Provider value={{ 
       pollData, 
@@ -106,6 +128,7 @@ export function CreatePollProvider({ children }: { children: React.ReactNode }) 
       isNamed, 
       setIsNamed,
       handlePollNamed,
+      handleDraftSelected,
       isLoading
     }}>
       {children}

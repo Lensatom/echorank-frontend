@@ -26,6 +26,7 @@ interface IPollDataContext {
   isNamed: boolean
   setIsNamed: React.Dispatch<React.SetStateAction<boolean>>
   handlePollNamed: (pollName: string) => Promise<void>
+  handleDraftSelected: (pollId: string) => Promise<void>
   isLoading: boolean
 }
 
