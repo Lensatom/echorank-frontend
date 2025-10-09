@@ -78,7 +78,7 @@ export function PollNamingForm({ onPollNamed }: IPollNamingFormProps) {
   }
 
   return (
-    <Container className="w-full min-h-screen flex items-center justify-center">
+    <Container className="w-full min-h-screen flex items-center justify-center pt-24">
       <div className="w-full max-w-2xl">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold mb-4">Your Polls</h1>
@@ -183,8 +183,6 @@ export function PollNamingForm({ onPollNamed }: IPollNamingFormProps) {
           </div>
         )}
       </div>
-
-      <div className='h-[1000px]' />
     </Container>
   )
 }
