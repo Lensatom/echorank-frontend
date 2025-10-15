@@ -40,7 +40,7 @@ export function Section({
     })
   }
 
-  const handleOptionChange = (optionIndex: number, field: 'text' | 'imageUrl', value: string) => {
+  const handleOptionChange = (optionIndex: number, field: 'title' | 'imageUrl', value: string) => {
     if (!pollData || !pollData.sections || !currentSection?.options) return
     
     const updatedSections = [...pollData.sections]
@@ -64,7 +64,7 @@ export function Section({
   const handleAddOption = () => {
     if (!pollData || !pollData.sections || !currentSection) return
     
-    const newOption = { text: '', imageUrl: '' }
+    const newOption = { title: '', imageUrl: '' }
     const updatedSections = [...pollData.sections]
     const updatedOptions = [...(currentSection.options || []), newOption]
     
@@ -110,16 +110,16 @@ export function Section({
       <form>
         <div className='flex flex-col'>
           <input
-            value={currentSection?.section || ''}
-            onChange={(e) => handleSectionChange('section', e.target.value)}
+            value={currentSection?.title || ''}
+            onChange={(e) => handleSectionChange('title', e.target.value)}
             placeholder={`Section ${index + 1}`}
             className='text-lg font-semibold outline-none'
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
           />
           <input
-            value={currentSection?.subText || ''}
-            onChange={(e) => handleSectionChange('subText', e.target.value)}
+            value={currentSection?.sub_title || ''}
+            onChange={(e) => handleSectionChange('sub_title', e.target.value)}
             placeholder='Enter sub text here'
             className='text-sm outline-none'
             onFocus={() => setIsFocused(true)}
@@ -144,8 +144,8 @@ export function Section({
               )}
             </div>
             <input
-              value={option.text}
-              onChange={(e) => handleOptionChange(optionIndex, 'text', e.target.value)}
+              value={option.title || ''}
+              onChange={(e) => handleOptionChange(optionIndex, 'title', e.target.value)}
               placeholder='Enter option text'
               className='text-sm mt-1 outline-none w-full'
               onFocus={() => setIsFocused(true)}

@@ -1,6 +1,7 @@
 import { Container } from '@/components/layout'
 import { Button } from "@/components/ui"
 import { CheckCircle, Clock12, Notebook, PlusCircle } from 'lucide-react'
+import { PublishedByYou } from './components'
 
 export function Home() {
 
@@ -64,8 +65,8 @@ export function Home() {
           <h4 className="text-xs font-semibold text-gray-600">Continue Filling</h4>
           <div className='overflow-x-auto mt-2'>
             <div className="gap-4 whitespace-nowrap">
-              {pendingForms.map((form) => (
-                <Container className='inline-block mr-4 border rounded-lg !p-3.5 !w-[200px]'>
+              {pendingForms.map((form, index) => (
+                <Container key={index} className='inline-block mr-4 border rounded-lg !p-3.5 !w-[200px]'>
                   <h4 className='text-xs font-bold text-gray-600'>{form.name}</h4>
                   <div className='flex flex-col gap-1 mt-1'>
                     <p className='text-[10px] text-gray-500'>{form.percentageComplete}% complete - {form.questionCount} Sections</p>
@@ -83,8 +84,8 @@ export function Home() {
         <div className="col-span-6 flex flex-col mt-6">
           <h4 className="text-xs font-semibold text-gray-600">Submitted Forms</h4>
           <div className='grid grid-cols-4 gap-4 mt-2'>
-            {pendingForms.map((form) => (
-              <Container className='inline-block border rounded-lg !p-3.5'>
+            {pendingForms.map((form, index) => (
+              <Container key={index} className='inline-block border rounded-lg !p-3.5'>
                 <h4 className='text-xs font-bold text-gray-600'>{form.name}</h4>
                 <div className='flex items-center gap-1'>
                   <CheckCircle size={10} />
@@ -97,26 +98,7 @@ export function Home() {
         </div>
       </div> 
 
-      <div className='col-span-3 border p-6 rounded-xl'>
-        <h4 className="text-xs font-semibold">Published by you</h4>
-        <div className='flex flex-col mt-3 gap-3'>
-          {pendingForms.map((form) => (
-            <Container className='flex items-center justify-between gap-4 border rounded-lg !p-3.5'>
-              <div className='flex items-center gap-3'>
-                <div className='w-12 h-12 bg-gray-100 rounded-lg'></div>
-                <div className='flex flex-col gap-1'>
-                  <h4 className='text-xs font-bold text-gray-600'>{form.name}</h4>
-                  <div className='flex items-center gap-1'>
-                    <CheckCircle size={10} />
-                    <p className='text-[10px] text-gray-500'>{form.questionCount} Responses</p>
-                  </div>
-                </div>
-              </div>
-              <Button size="sm" className='!text-[10px] !px-2 !py-1 !bg-gray-100 !text-gray-700 !hover:bg-purple-200 !hover:text-purple-800'>View</Button>
-            </Container>
-          ))}
-        </div>
-      </div>
+      <PublishedByYou />
     </Container>
   )
 }

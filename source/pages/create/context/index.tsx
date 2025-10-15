@@ -3,11 +3,11 @@
 import React from "react"
 
 export interface IPollSection {
-  section?: string
-  subText?: string
+  title?: string
+  sub_title?: string
   isRequired?: boolean
   options?: Array<{
-    text: string
+    title: string
     imageUrl?: string
   }>
 }

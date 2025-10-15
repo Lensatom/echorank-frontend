@@ -1,4 +1,4 @@
-import { api, tokenInterceptor } from ".";
+import { api, tokenInterceptor } from "./axios";
 import { IDELETE, IGET, IPOST, IPUT } from "./interfaces";
 
 export const POST = async ({

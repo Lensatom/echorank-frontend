@@ -5,8 +5,9 @@ import { Button } from '@/components/ui'
 import { Plus, Save, Upload } from 'lucide-react'
 import { Section, PollNamingForm, LoadingSpinner } from './components'
 import { CreatePollProvider } from './providers'
-import { useContext } from 'react'
+import { useContext, useTransition } from 'react'
 import { CreatePollContext, IPollSection } from './context'
+import { useCreatePoll } from './api'
 
 function CreatePollForm() {
   const context = useContext(CreatePollContext)
@@ -16,15 +17,17 @@ function CreatePollForm() {
   }
   
   const { pollData, setPollData, isNamed, handlePollNamed, handleDraftSelected, isLoading } = context
+  const { createPoll } = useCreatePoll()
+  const [ isPending, startTransition ] = useTransition()
 
   const handleAddNewSection = () => {
     const newSection: IPollSection = {
-      section: '',
-      subText: '',
+      title: '',
+      sub_title: '',
       isRequired: false,
       options: [
         {
-          text: '',
+          title: '',
           imageUrl: ''
         }
       ]
@@ -37,6 +40,22 @@ function CreatePollForm() {
       return {
         ...prev,
         sections: [...prev.sections, newSection]
+      }
+    })
+  }
+
+  const handleSubmit = async () => {
+    const payload = {
+      title: pollData?.name,
+      sections: pollData?.sections
+    }
+
+    startTransition( async () => {
+      try {
+        await createPoll(payload)
+        console.log("Done ASAP!")
+      } catch (error) {
+        console.log("Not Done ASAP", error)
       }
     })
   }
@@ -68,7 +87,7 @@ function CreatePollForm() {
             <Save size={16} />
             <p className='text-xs'>Auto-saves to draft</p>
           </div>
-          <Button className='!px-6'>
+          <Button className='!px-6' isLoading={isPending} onClick={handleSubmit}>
             <Upload />
             Publish
           </Button>

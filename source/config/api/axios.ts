@@ -1,6 +1,6 @@
 import { SERVER_BASE_URL } from '@/constants';
-import { getAccessToken } from '@/helpers/accessTokenHelpers';
 import axios, { AxiosError } from 'axios';
+import { getToken } from './tokenManager';
 
 export type ApiRes<DataType = null> = {
   token: any;
@@ -35,7 +35,7 @@ api.interceptors.response.use(
 export function tokenInterceptor() {
   const interceptor = api.interceptors.request.use(
     async (config) => {
-      const token = await getAccessToken();
+      const token = await getToken();
       console.log('token:', token);
       if (token) {
         config.headers['Authorization'] = `Bearer ${token}`;

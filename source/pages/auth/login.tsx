@@ -3,10 +3,10 @@
 import { Button, Input } from '@/components/ui'
 import { useForm } from '@/hooks'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import React from 'react'
 import { useLogin } from './api'
-import { saveAccessToken } from '@/helpers/accessTokenHelpers'
-import { useRouter } from 'next/navigation'
+import { storeToken } from '@/config/api/tokenManager'
 
 export function Login() {
 
@@ -17,18 +17,18 @@ export function Login() {
     password: ""
   })
   const [ showPassword, setShowPassword ] = React.useState(false)
-  const { login } = useLogin()
   const [isPending, startTransition] = React.useTransition()
+  const { login } = useLogin()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     startTransition(async () => {
       try {
         const res = await login({ email: data.email, password: data.password })
-        saveAccessToken(res.token)
+        await storeToken(res.token)
         router.replace('/home')
       } catch (error) {
-        console.error(error)
+        console.error("error", error)
       }
     })
   }
