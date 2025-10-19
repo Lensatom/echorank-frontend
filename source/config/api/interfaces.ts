@@ -8,6 +8,7 @@ export interface IPOST {
 export interface IGET {
   route: string;
   authorization?: boolean;
+  isServer?: boolean;
 }
 
 export interface IPUT {

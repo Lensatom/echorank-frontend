@@ -4,7 +4,6 @@ import { CheckCircle, Clock12, Notebook, PlusCircle } from 'lucide-react'
 import { PublishedByYou } from './components'
 
 export function Home() {
-
   const pendingForms = [
     {
       name: "Class Governor Poll",

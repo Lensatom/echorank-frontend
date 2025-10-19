@@ -1,3 +1,4 @@
+import { isServer } from "@tanstack/react-query";
 import { api, tokenInterceptor } from "./axios";
 import { IDELETE, IGET, IPOST, IPUT } from "./interfaces";
 
@@ -21,9 +22,10 @@ export const POST = async ({
 
 export const GET = async ({
   route,
-  authorization=true
+  authorization=true,
+  isServer=false
 }:IGET) => {
-  const eject = tokenInterceptor();
+  const eject = tokenInterceptor(isServer);
   const response = await api.get(
     route,
     {headers: {"Content-Type": "application/json"}}

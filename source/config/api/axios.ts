@@ -32,10 +32,10 @@ api.interceptors.response.use(
   }
 );
 
-export function tokenInterceptor() {
+export function tokenInterceptor(isServer = false) {
   const interceptor = api.interceptors.request.use(
     async (config) => {
-      const token = await getToken();
+      const token = await getToken(isServer);
       console.log('token:', token);
       if (token) {
         config.headers['Authorization'] = `Bearer ${token}`;

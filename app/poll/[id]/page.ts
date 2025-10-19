@@ -1,0 +1,1 @@
+export { Poll as default } from "@/pages/poll"
