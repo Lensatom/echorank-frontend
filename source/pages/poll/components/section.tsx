@@ -8,6 +8,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import { Option } from './option';
 import DropZone from './dropZone';
 import type { DragOptionItem } from './option';
+import { X } from 'lucide-react';
 
 interface ISectionData {
   sectionId: string
@@ -65,30 +66,20 @@ export function Section({
           Drag and drop options in the option box into the ranking box to rank them in an order of your preference.
         </p>
         <Container className='!px-4 !py-0 border rounded-md mt-3'>
-          <p className='text-xs font-semibold p-2 mt-2 rounded-md bg-green-100 text-green-600'>Ranking</p>
+          {/* <p className='text-xs font-semibold p-2 mt-2 rounded-md bg-green-100 text-green-600'>Ranking</p> */}
           <div className='min-h-[200px] w-full'>
-            <DropZone onDrop={(items) => handleDrop(items, 0)} />
+            <DropZone full={droppedItems.length === 0} onDrop={(items) => handleDrop(items, 0)} />
             {droppedItems.length === 0 ? (
               <p className='text-xs text-gray-600 text-center mt-4'>Drag options here to rank them</p>
             ) : (
               <ul>
                 {droppedItems.map((item, index) => (
                   <React.Fragment key={`${item.name}-${index}`}>
-                    <div
-                        style={{
-                            border: '1px solid #ccc',
-                            padding: '10px',
-                            borderRadius: '5px',
-                            backgroundColor: 'lightblue',
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                        }}>
-                        <p>{item.name}</p>
-                        <button onClick={
-                            () => handleRemoveItem(index)}>
-                            Remove
-                        </button>
+                    <div className='text-sm flex items-center justify-between bg-gray-200 p-4'>
+                      <p>{item.title}</p>
+                      <button onClick={() => handleRemoveItem(index)}>
+                        <X className='text-gray-500' />
+                      </button>
                     </div>
                     <DropZone onDrop={(items) => handleDrop(items, index + 1)} />
                   </React.Fragment>
@@ -98,7 +89,7 @@ export function Section({
           </div>
         </Container>
         <Container className='!p-4 border rounded-md mt-3'>
-          <p className='text-xs font-semibold p-2 rounded-md bg-yellow-100 text-yellow-600'>Options</p>
+          {/* <p className='text-xs font-semibold p-2 rounded-md bg-yellow-100 text-yellow-600'>Options</p> */}
           <p className='text-xs mt-3 text-gray-500'>
             Options are arranged in alphabetical order. Use the "others" tag to represent all options left
           </p>

@@ -4,7 +4,8 @@ import React from 'react';
 import { useDrag } from 'react-dnd';
 
 export interface DragOptionItem {
-  name: string
+  name: string,
+  title: string
 }
 
 interface IOptionProps {
@@ -20,8 +21,8 @@ export function Option({
   option,
 }: IOptionProps) {
   const dragItem: DragOptionItem = React.useMemo(() => (
-    { name: option.title }),
-    [option.optionId]
+    { name: option.optionId, title: option.title }),
+    [option.optionId, option.title]
   )
 
   const [{ isDragging }, drag] = useDrag<DragOptionItem, void, { isDragging: boolean }>(() => ({
@@ -40,13 +41,9 @@ export function Option({
       ref={dragRef}
       style={{
         opacity: isDragging ? 0.5 : 1,
-        cursor: 'grab',
-        border: '1px solid #ccc',
-        padding: '10px',
-        borderRadius: '5px',
-        backgroundColor: 'lightblue',
+        cursor: 'grab'
       }}
-      className='flex items-center justify-center py-2 bg-gray-100 rounded-md border cursor-grab hover:bg-gray-200 transition-colors'
+      className='text-sm flex items-center justify-between bg-gray-200 p-4'
     >
       <span className='text-xs text-gray-600 font-medium'>{option.title}</span>
     </div>

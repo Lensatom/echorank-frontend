@@ -3,10 +3,15 @@ import { useDrop } from 'react-dnd';
 import type { DragOptionItem } from './option';
 
 interface DropZoneProps {
-  onDrop: (item: DragOptionItem) => void
+  onDrop: (item: DragOptionItem) => void,
+  full?: boolean
 }
 
-const DropZone = ({ onDrop }: DropZoneProps) => {
+const DropZone = ({
+  onDrop,
+  full=false
+}: DropZoneProps) => {
+
   const [{ isOver }, drop] = useDrop(() => ({
     accept: 'item',
     drop: (item: DragOptionItem) => onDrop(item),
@@ -25,7 +30,7 @@ const DropZone = ({ onDrop }: DropZoneProps) => {
   return (
     <div
       ref={dropRef}
-      className={`${baseClasses} ${hoverClasses} ${activeClasses}`}
+      className={`${full ? '!h-[200px]' : ''} ${baseClasses} ${hoverClasses} ${activeClasses}`}
     >
       {/* Drop here */}
     </div>
