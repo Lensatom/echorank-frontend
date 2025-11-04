@@ -24,7 +24,7 @@ export async function Poll({ params }: { params: { id: string } }) {
         <h2 className='text-lg font-bold text-gray-800'>{pollData?.title}</h2>
         <div className='mt-6'>
           {pollData?.sections?.map((section:any, index:number) => (
-            <Section key={index} data={section} />
+            <Section key={index} section={section} />
           ))}
         </div>
       </Container>

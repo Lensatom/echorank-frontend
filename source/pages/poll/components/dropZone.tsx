@@ -1,0 +1,35 @@
+import React from 'react';
+import { useDrop } from 'react-dnd';
+import type { DragOptionItem } from './option';
+
+interface DropZoneProps {
+  onDrop: (item: DragOptionItem) => void
+}
+
+const DropZone = ({ onDrop }: DropZoneProps) => {
+  const [{ isOver }, drop] = useDrop(() => ({
+    accept: 'item',
+    drop: (item: DragOptionItem) => onDrop(item),
+    collect: (monitor) => ({
+      isOver: monitor.isOver(),
+    }),
+  }));
+
+  const dropRef = React.useRef<HTMLDivElement | null>(null);
+  drop(dropRef);
+
+  const baseClasses = 'cursor-pointer rounded-md h-3 transition-all duration-200 text-center select-none';
+  const hoverClasses = 'hover:w-10';
+  const activeClasses = isOver ? 'h-10 text-white border-2 border-gray-200 border-dashed' : 'border-black';
+
+  return (
+    <div
+      ref={dropRef}
+      className={`${baseClasses} ${hoverClasses} ${activeClasses}`}
+    >
+      {/* Drop here */}
+    </div>
+  );
+};
+
+export default DropZone;
