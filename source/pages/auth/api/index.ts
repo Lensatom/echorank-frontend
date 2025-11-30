@@ -3,10 +3,10 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 
 export const useLogin = () => {
   const { mutateAsync:login, ...rest } = useMutation({
-    mutationFn: async ({ email, password }: { email: string; password: string }) => {
+    mutationFn: async (data: { email: string; password: string }) => {
       const response = await POST({
         route: '/auth/login',
-        data: { email, password },
+        data,
         authorization: false
       })
 
@@ -17,11 +17,11 @@ export const useLogin = () => {
 }
 
 export const useRegister = () => {
-  const { mutate:register, ...rest } = useMutation({
-    mutationFn: async ({ email, password }: { email: string; password: string }) => {
+  const { mutateAsync:register, ...rest } = useMutation({
+    mutationFn: async (data: { email: string; password: string, first_name: string, last_name: string }) => {
       const response = await POST({
         route: '/auth/register',
-        data: { email, password },
+        data,
         authorization: false
       })
       return response

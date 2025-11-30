@@ -1,4 +1,3 @@
-import { isServer } from "@tanstack/react-query";
 import { api, tokenInterceptor } from "./axios";
 import { IDELETE, IGET, IPOST, IPUT } from "./interfaces";
 

@@ -24,7 +24,7 @@ export function Login() {
     e.preventDefault()
     startTransition(async () => {
       try {
-        const res = await login({ email: data.email, password: data.password })
+        const res = await login(data)
         await storeToken(res.token)
         router.replace('/home')
       } catch (error) {

@@ -21,15 +21,18 @@ interface ISectionData {
 }
 
 interface ISectionProps {
-  section: ISectionData
+  section: ISectionData,
+  ranking: DragOptionItem[],
+  changeRankings: (newRankings:any) => void
 }
 
 export function Section({
-  section
+  section,
+  ranking,
+  changeRankings
 }: ISectionProps) {
 
   const [searchTerm, setSearchTerm] = React.useState('')
-  const [droppedItems, setDroppedItems] = useState<DragOptionItem[]>([]);
   const [availableOptions, setAvailableOptions] = useState(section.options);
 
   const filteredOptions = availableOptions.filter(option =>
@@ -37,21 +40,26 @@ export function Section({
   );
 
   const handleDrop = (item: DragOptionItem, index: number) => {
-    setDroppedItems((prevItems) => {
-      const updatedItems = [...prevItems];
-      updatedItems.splice(index, 0, item);
-      return updatedItems;
+    const newRanking = [...ranking];
+    newRanking.splice(index, 0, item);
+    changeRankings({
+      sectionId: section.sectionId,
+      ranking: newRanking
     });
+
     setAvailableOptions((prevOptions) =>
       prevOptions.filter(option => option.optionId !== item.name)
     );
   };
 
   const handleRemoveItem = (index: number) => {
-    const updatedItems = [...droppedItems];
-    updatedItems.splice(index, 1);
-    setDroppedItems(updatedItems);
-    const removedItem = droppedItems[index];
+    const updatedRanking = [...ranking];
+    updatedRanking.splice(index, 1);
+    changeRankings({
+      sectionId: section.sectionId,
+      ranking: updatedRanking
+    });
+    const removedItem = ranking[index];
     const removedOption = section.options.find(option => option.optionId === removedItem.name);
     if (removedOption) {
       setAvailableOptions((prevOptions) => [...prevOptions, removedOption]);
@@ -68,12 +76,12 @@ export function Section({
         <Container className='!px-4 !py-0 border rounded-md mt-3'>
           {/* <p className='text-xs font-semibold p-2 mt-2 rounded-md bg-green-100 text-green-600'>Ranking</p> */}
           <div className='min-h-[200px] w-full'>
-            <DropZone full={droppedItems.length === 0} onDrop={(items) => handleDrop(items, 0)} />
-            {droppedItems.length === 0 ? (
+            <DropZone full={ranking.length === 0} onDrop={(items) => handleDrop(items, 0)} />
+            {ranking.length === 0 ? (
               <p className='text-xs text-gray-600 text-center mt-4'>Drag options here to rank them</p>
             ) : (
               <ul>
-                {droppedItems.map((item, index) => (
+                {ranking.map((item, index) => (
                   <React.Fragment key={`${item.name}-${index}`}>
                     <div className='text-sm flex items-center justify-between bg-gray-200 p-4'>
                       <p>{item.title}</p>
