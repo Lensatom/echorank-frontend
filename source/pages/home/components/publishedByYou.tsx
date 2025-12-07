@@ -8,16 +8,19 @@ import Link from 'next/link'
 export async function PublishedByYou() {
   try {
     const token = await getToken(true)
-    const res = await fetch(formatUrl('/poll'), {
+    const res = await fetch(formatUrl('/polls'), {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`
       }
     })
+
     const data = await res.json()
+
+    console.log(data.data.polls)
     
-    const publishedPolls = data.polls || []
+    const publishedPolls = data.data.polls || []
 
     return (
       <div className='col-span-3 border p-6 rounded-xl'>
@@ -51,6 +54,7 @@ export async function PublishedByYou() {
       </div>
     )
   } catch (error) {
+    console.error("Error fetching published polls:", error)
     return <>ERROR!!!</>
   }
 }

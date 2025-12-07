@@ -12,10 +12,10 @@ import { X } from 'lucide-react';
 
 interface ISectionData {
   sectionId: string
-  title: string
+  name: string
   options: {
     optionId: string
-    title: string
+    name: string
     imageUrl?: string
   }[]
 }
@@ -36,12 +36,16 @@ export function Section({
   const [availableOptions, setAvailableOptions] = useState(section.options);
 
   const filteredOptions = availableOptions.filter(option =>
-    option.title.toLowerCase().includes(searchTerm.toLowerCase())
+    option.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const newRanking = [...ranking];
   const handleDrop = (item: DragOptionItem, index: number) => {
-    const newRanking = [...ranking];
     newRanking.splice(index, 0, item);
+    
+    console.log('Dropped item:', item);
+    console.log('New ranking:', newRanking);
+
     changeRankings({
       sectionId: section.sectionId,
       ranking: newRanking
@@ -53,11 +57,10 @@ export function Section({
   };
 
   const handleRemoveItem = (index: number) => {
-    const updatedRanking = [...ranking];
-    updatedRanking.splice(index, 1);
+    newRanking.splice(index, 1);
     changeRankings({
       sectionId: section.sectionId,
-      ranking: updatedRanking
+      ranking: newRanking
     });
     const removedItem = ranking[index];
     const removedOption = section.options.find(option => option.optionId === removedItem.name);
@@ -69,14 +72,14 @@ export function Section({
   return (
     <DndProvider backend={HTML5Backend}>
       <Container className='border rounded-lg'>
-        <h3 className='text-sm font-bold text-gray-700'>{section.title}</h3>
+        <h3 className='text-sm font-bold text-gray-700'>{section.name}</h3>
         <p className='text-xs mt-1 text-gray-500'>
           Drag and drop options in the option box into the ranking box to rank them in an order of your preference.
         </p>
         <Container className='!px-4 !py-0 border rounded-md mt-3'>
           {/* <p className='text-xs font-semibold p-2 mt-2 rounded-md bg-green-100 text-green-600'>Ranking</p> */}
           <div className='min-h-[200px] w-full'>
-            <DropZone full={ranking.length === 0} onDrop={(items) => handleDrop(items, 0)} />
+            <DropZone full={ranking.length === 0} onDrop={(item) => handleDrop(item, 0)} />
             {ranking.length === 0 ? (
               <p className='text-xs text-gray-600 text-center mt-4'>Drag options here to rank them</p>
             ) : (
@@ -84,12 +87,12 @@ export function Section({
                 {ranking.map((item, index) => (
                   <React.Fragment key={`${item.name}-${index}`}>
                     <div className='text-sm flex items-center justify-between bg-gray-200 p-4'>
-                      <p>{item.title}</p>
+                      <p>{item.optionName}</p>
                       <button onClick={() => handleRemoveItem(index)}>
                         <X className='text-gray-500' />
                       </button>
                     </div>
-                    <DropZone onDrop={(items) => handleDrop(items, index + 1)} />
+                    <DropZone onDrop={(item) => handleDrop(item, index + 1)} />
                   </React.Fragment>
               ))}
               </ul>

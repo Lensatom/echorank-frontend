@@ -6,7 +6,7 @@ export const useGetPollById = ({ id }: { id: string }) => {
     queryKey: ['poll', id],
     queryFn: async () => {
       const res = await GET({
-        route: `/poll/${id}`,
+        route: `/polls/${id}`,
       })
       return res.poll;
     }
@@ -19,7 +19,7 @@ export const usePostVote = () => {
   const { mutateAsync: postVote, ...rest } = useMutation({
     mutationFn: async ({id, data} : {id: string, data: {ranking: {sectionId: string, ranking: string[]}}}) => {
       const res = await POST({
-        route: `/poll/${id}/vote`,
+        route: `/polls/${id}/vote`,
         data,
       })
 

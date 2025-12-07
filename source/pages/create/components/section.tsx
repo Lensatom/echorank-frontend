@@ -2,7 +2,7 @@
 
 import { Container } from '@/components/layout'
 import { Button } from '@/components/ui'
-import { ImageUpIcon, Plus, X } from 'lucide-react'
+import { Plus, X } from 'lucide-react'
 import { useContext, useState } from 'react'
 import { CreatePollContext, IPollSection } from '../context'
 
@@ -40,7 +40,7 @@ export function Section({
     })
   }
 
-  const handleOptionChange = (optionIndex: number, field: 'title' | 'imageUrl', value: string) => {
+  const handleOptionChange = (optionIndex: number, field: 'name', value: string) => {
     if (!pollData || !pollData.sections || !currentSection?.options) return
     
     const updatedSections = [...pollData.sections]
@@ -64,7 +64,7 @@ export function Section({
   const handleAddOption = () => {
     if (!pollData || !pollData.sections || !currentSection) return
     
-    const newOption = { title: '', imageUrl: '' }
+    const newOption = { name: ''}
     const updatedSections = [...pollData.sections]
     const updatedOptions = [...(currentSection.options || []), newOption]
     
@@ -110,16 +110,16 @@ export function Section({
       <form>
         <div className='flex flex-col'>
           <input
-            value={currentSection?.title || ''}
-            onChange={(e) => handleSectionChange('title', e.target.value)}
+            value={currentSection?.name || ''}
+            onChange={(e) => handleSectionChange('name', e.target.value)}
             placeholder={`Section ${index + 1}`}
             className='text-lg font-semibold outline-none'
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
           />
           <input
-            value={currentSection?.sub_title || ''}
-            onChange={(e) => handleSectionChange('sub_title', e.target.value)}
+            value={currentSection?.description || ''}
+            onChange={(e) => handleSectionChange('description', e.target.value)}
             placeholder='Enter sub text here'
             className='text-sm outline-none'
             onFocus={() => setIsFocused(true)}
@@ -144,14 +144,14 @@ export function Section({
               )}
             </div>
             <input
-              value={option.title || ''}
-              onChange={(e) => handleOptionChange(optionIndex, 'title', e.target.value)}
+              value={option.name || ''}
+              onChange={(e) => handleOptionChange(optionIndex, 'name', e.target.value)}
               placeholder='Enter option text'
               className='text-sm mt-1 outline-none w-full'
               onFocus={() => setIsFocused(true)}
               onBlur={() => setIsFocused(false)}
             />
-            <div className='flex items-center gap-2 mt-3'>
+            {/* <div className='flex items-center gap-2 mt-3'>
               <ImageUpIcon size={18} className='text-gray-600' />
               <input
                 value={option.imageUrl || ''}
@@ -161,7 +161,7 @@ export function Section({
                 onFocus={() => setIsFocused(true)}
                 onBlur={() => setIsFocused(false)}
               />
-            </div>
+            </div> */}
           </Container>
         ))}
         

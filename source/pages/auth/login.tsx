@@ -25,7 +25,7 @@ export function Login() {
     startTransition(async () => {
       try {
         const res = await login(data)
-        await storeToken(res.token)
+        await storeToken(res.data.token)
         router.replace('/home')
       } catch (error) {
         console.error("error", error)

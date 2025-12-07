@@ -22,13 +22,12 @@ export const draftUtils = {
       lastModified: now,
       sections: [
         {
-          title: '',
-          sub_title: '',
+          name: '',
+          description: '',
           isRequired: false,
           options: [
             {
-              title: '',
-              imageUrl: ''
+              name: ''
             }
           ]
         }
@@ -47,7 +46,7 @@ export const draftUtils = {
     const drafts = draftUtils.getAllDrafts()
     const existingIndex = drafts.findIndex(draft => draft.id === poll.id)
     
-    const preview = poll.sections[0]?.title || 'Untitled Section'
+    const preview = poll.sections[0]?.name || 'Untitled Section'
     const draftInfo: IPollDraft = {
       id: poll.id,
       name: poll.name,

@@ -18,6 +18,6 @@ export async function POST(req: Request) {
 
 export async function GET() {
   const cookieStore = await cookies();
-  const token = cookieStore.get("access_token")?.value;
+  const token = cookieStore.get(ACCESS_TOKEN_KEY)?.value;
   return NextResponse.json({ token });
 }

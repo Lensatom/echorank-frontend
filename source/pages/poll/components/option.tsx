@@ -5,14 +5,13 @@ import { useDrag } from 'react-dnd';
 
 export interface DragOptionItem {
   name: string,
-  title: string
+  optionName: string
 }
 
 interface IOptionProps {
   option: {
     optionId: string
-    title: string
-    imageUrl?: string
+    name: string
   },
   sectionId: string
 }
@@ -21,8 +20,8 @@ export function Option({
   option,
 }: IOptionProps) {
   const dragItem: DragOptionItem = React.useMemo(() => (
-    { name: option.optionId, title: option.title }),
-    [option.optionId, option.title]
+    { name: option.optionId, optionName: option.name }),
+    [option.optionId, option.name]
   )
 
   const [{ isDragging }, drag] = useDrag<DragOptionItem, void, { isDragging: boolean }>(() => ({
@@ -45,7 +44,7 @@ export function Option({
       }}
       className='text-sm flex items-center justify-between bg-gray-200 p-4'
     >
-      <span className='text-xs text-gray-600 font-medium'>{option.title}</span>
+      <span className='text-xs text-gray-600 font-medium'>{option.name}</span>
     </div>
   )
 }

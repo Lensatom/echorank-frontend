@@ -3,13 +3,12 @@
 import React from "react"
 
 export interface IPollSection {
-  title?: string
-  sub_title?: string
+  name: string
+  description: string
   isRequired?: boolean
-  options?: Array<{
-    title: string
-    imageUrl?: string
-  }>
+  options: {
+    name: string
+  }[]
 }
 
 export interface ICreatePoll {

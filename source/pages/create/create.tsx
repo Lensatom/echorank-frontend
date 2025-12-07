@@ -22,13 +22,12 @@ function CreatePollForm() {
 
   const handleAddNewSection = () => {
     const newSection: IPollSection = {
-      title: '',
-      sub_title: '',
+      name: '',
+      description: 'test1000',
       isRequired: false,
       options: [
         {
-          title: '',
-          imageUrl: ''
+          name: ''
         }
       ]
     }
