@@ -1,1 +1,0 @@
-export { AuthLayout as default } from '@/pages/auth/layouts'
