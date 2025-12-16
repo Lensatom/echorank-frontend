@@ -1,11 +1,9 @@
-import { ACCESS_TOKEN_KEY } from "@/shared/constants";
+import { ACCESS_TOKEN_KEY, SERVER_BASE_URL } from './constants';
 
 export const storeToken = async (token: string) => {
-  await fetch('/api/token', {
+  await fetch('/api/auth/token', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ token })
   });
 }
@@ -17,7 +15,7 @@ export const getToken = async (isServer = false) => {
     return token;
   }
 
-  const res = await fetch('/api/token');
+  const res = await fetch('/api/auth/token');
   if (!res.ok) throw new Error('Failed to fetch token');
   const data = await res.json();
   return data.token;

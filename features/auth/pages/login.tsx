@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import React from 'react'
 import { useLogin } from '../api'
-import { storeToken } from '@/shared/config/api/tokenManager'
+import { storeToken } from '@/shared/config/api/services'
 
 export function Login() {
 

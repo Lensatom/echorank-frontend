@@ -1,30 +1,33 @@
 'use client'
 
-import { History, Home, PlusCircle, User } from 'lucide-react'
+import { AlignVerticalDistributeEnd, BadgeInfo, Home, SquarePlus, User, Vote } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { v4 as uuidv4 } from 'uuid';
 
-export function Sidebar() {
+export function Sidebar({
+  className
+}: {
+  className?: string
+}) {
   const pathname = usePathname()
 
   const routes = [
     { icon: Home, label: 'Home', route: '/home' },
-    { icon: History, label: 'History', route: '/history' },
-    { icon: PlusCircle, label: 'Create', route: `/create?id=${uuidv4()}` },
+    { icon: Vote, label: 'Polls', route: '/history' },
+    { icon: AlignVerticalDistributeEnd, label: 'Votes', route: '/history' },
+    { icon: SquarePlus, label: 'Create', route: '/create' },
+    { icon: BadgeInfo, label: 'Help', route: '/help' },
     { icon: User, label: 'Profile', route: '/profile' }
   ]
 
   return (
-    <div className='fixed h-screen bg-gray-100 w-20 border-r flex flex-col pt-24 items-center gap-8 text-gray-600'>
+    <div className={`fixed h-screen bg-white flex flex-col pt-24 p-4 gap-4 text-gray-600 ${className}`}>
       {routes.map((route) => {
         const isActive = pathname.includes(route.route.split('?')[0])
         return (
-          <Link href={route.route} key={route.label} className={`flex flex-col items-center justify-center rounded-lg`}>
-            <div className={`flex items-center justify-center h-8 w-8 rounded-lg ${isActive ? 'bg-blue-500' : 'bg-transparent'}`}>
-              <route.icon size={18} className={isActive ? 'text-white' : 'text-gray-600'} />
-            </div>
-            <span className={`text-[10px] ${isActive ? 'text-black font-semibold' : 'text-gray-600'}`}>{route.label}</span>
+          <Link href={route.route} key={route.label} className={`flex items-center gap-3 rounded-lg p-3 ${isActive ? "bg-blue-100 text-blue-500 font-semibold" : ""}`}>
+            <route.icon size={20} fill={isActive ? "#155dfc" : "none"} fillOpacity={0.8} />
+            <span className="text-xs">{route.label}</span>
           </Link>
         )
       })}

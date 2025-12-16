@@ -4,7 +4,6 @@ import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   const { token } = await req.json();
-
   const cookieStore = await cookies()
   cookieStore.set(ACCESS_TOKEN_KEY, token, {
     httpOnly: true,
@@ -12,7 +11,6 @@ export async function POST(req: Request) {
     path: "/",
     maxAge: 60 * 60 * 24 * 7
   });
-
   return NextResponse.json({ success: true });
 }
 

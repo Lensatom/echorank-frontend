@@ -1,12 +1,12 @@
 "use client"
 
 import { Button, Input } from '@/shared/components/ui'
-import { storeToken } from '@/shared/config/api/tokenManager'
 import { useForm } from '@/shared/hooks'
 import Link from 'next/link'
 import React from 'react'
 import { useRegister } from '../api'
 import { useRouter } from 'next/navigation'
+import { storeToken } from '@/shared/config/api/services'
 
 export function Register() {
 

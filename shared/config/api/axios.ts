@@ -1,14 +1,7 @@
-import { SERVER_BASE_URL } from '@/shared/constants';
 import axios, { AxiosError } from 'axios';
-import { getToken } from './tokenManager';
-
-export type ApiRes<DataType = null> = {
-  token: any;
-  user(user: any): unknown;
-  statusCode: number;
-  message: string | null;
-  data: DataType;
-};
+import { ApiRes } from './interfaces';
+import { getToken } from './services';
+import { SERVER_BASE_URL } from './constants';
 
 export const api = axios.create({
   baseURL: SERVER_BASE_URL,

@@ -1,6 +1,6 @@
 import { Container } from '@/shared/components/layout'
 import { Avatar, AvatarFallback, Button } from '@/shared/components/ui'
-import { getToken } from '@/shared/config/api/tokenManager'
+import { getToken } from '@/shared/config/api/services'
 import { encryptId, formatUrl } from '@/shared/helpers/general'
 import { CheckCircle } from 'lucide-react'
 import Link from 'next/link'

@@ -1,3 +1,11 @@
+export interface ApiRes<DataType = null> {
+  token: any;
+  user(user: any): unknown;
+  statusCode: number;
+  message: string | null;
+  data: DataType;
+};
+
 export interface IPOST {
   route: string;
   data: any;

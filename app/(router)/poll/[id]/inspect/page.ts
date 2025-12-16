@@ -1,1 +1,0 @@
-export { InspectVotes as default } from "@/pages/poll"

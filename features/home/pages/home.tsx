@@ -28,24 +28,30 @@ export function Home() {
   ]
 
   return (
-    <Container className='grid grid-cols-9 gap-6'>
-      <div className='col-span-9'>
-        <h2 className='text-xl font-bold'>Hello, Jayden</h2>
+    <Container className='min-h-screen flex flex-col gap-10'>
+      <div className='grid grid-cols-9 gap-6'>
+        <Container className='relative col-span-6 bg-blue-900 text-white rounded-md overflow-hidden'>
+          <div className="absolute h-[400px] w-1/3 right-0 -top-[100px] bg-blue-100 rounded-l-full border-16 border-r-0 !border-blue-300" />
+          <div>
+            <h1 className='text-xl font-bold'>Hi Nifemi, <span className='text-xs text-blue-200'>Let's make fairer decisions today</span></h1>
+            <h2 className='text-sm font-medium text-blue-50'></h2>
+            <p className='mt-2 text-[10px] text-gray-300 font-medium w-[40%]'>
+              EchoRank uses instant runoff voting to ensure that every voice is heard. Make decisions that truly reflect the will of the group.
+            </p>
+          </div>
+          <Button size="sm" className="bg-white text-black mt-4 !text-xs !rounded-sm">Create a Form now</Button>
+        </Container>
+
+        <div className='col-span-3 bg-gray-50 rounded-md shadow-sm shadow-gray-200 p-4 flex items-center gap-4'>
+          <div className='h-full w-1/3 rounded-md bg-gray-200'></div>
+          <div>
+            <h3 className='font-medium text-xl text-gray-600'>Nifemi Oluwatosin</h3>
+            <p className='text-sm'>20 Polls Published</p>
+          </div>
+        </div>
       </div>
 
-      <Container className='relative col-span-6 bg-blue-900 text-white rounded-xl overflow-hidden'>
-        <div>
-          <h3 className='text-lg font-bold'>Make Fairer Decisions</h3>
-          <p className='mt-1 text-xs text-gray-300 w-1/2'>
-            EchoRank uses instant runoff voting to ensure that every voice is heard. Make decisions that truly reflect the will of the group.
-          </p>
-        </div>
-        <div className="absolute h-[400px] w-1/3 right-0 -top-[100px] bg-blue-100 rounded-l-full border-16 border-r-0 !border-blue-300">
-        </div>
-        <Button size="sm" className="bg-white text-black mt-4 !text-xs">Create a Form now</Button>
-      </Container>
-
-      <Container className='col-span-3 row-span-2 bg-gray-100 rounded-lg'>
+      {/* <Container className='col-span-3 row-span-2 bg-gray-100 rounded-lg'>
         <h4 className="text-xs text-gray-500 font-semibold">Drafts (10)</h4>
       </Container>
 
@@ -57,11 +63,62 @@ export function Home() {
       </Container>
       <Container className='border rounded-lg col-span-2'>
         <Clock12 />
-      </Container>
+      </Container> */}
+
+      <section className='col-span-9'>
+        <h4 className="text-base font-bold text-gray-600">Continue voting</h4>
+        <div className='mt-3 grid grid-cols-4 gap-x-3 gap-y-6'>
+          {pendingForms.map((form, index) => (
+            <div key={index} className='relative mr-4 overflow-hidden bg-gray-50 shadow-md shadow-gray-200 rounded-md p-4 w-full'>
+              <div className='flex items-center gap-2'>
+                <div className='w-8 h-8 rounded-sm bg-gray-200' />
+                <div>
+                  <h4 className='text-xs font-bold text-gray-600'>{form.name}</h4>
+                  <p className='text-[10px] text-gray-500'>Nifemi Oluwatosin</p>
+                </div>
+              </div>
+              <div className='h-[5px] mt-3 w-full bg-gray-200'>
+                <div className='h-full bg-blue-400' style={{ width: `${form.percentageComplete}%` }} />
+              </div>
+              <p className='text-[10px] text-gray-500 mt-1'>{form.questionCount} Sections - {form.percentageComplete}% complete</p>
+              <div className='grid grid-cols-2 mt-4 gap-3'>
+                <Button size="sm" className='w-full !text-[10px] !px-2 !py-1 !bg-gray-100 !text-gray-500 !hover:bg-blue-200 !hover:text-blue-800'>Discard</Button>
+                <Button size="sm" className='w-full !text-[10px] !bg-blue-100 !text-gray-500'>Continue</Button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className='col-span-9'>
+        <h4 className="text-base font-bold text-gray-600">Published by you</h4>
+        <div className='mt-3 grid grid-cols-3 gap-[1px]'>
+          {pendingForms.map((form, index) => (
+            <div key={index} className='relative mr-4 overflow-hidden bg-gray-50 shadow-sm shadow-gray-200 p-4 w-full'>
+              {/* <div className='absolute top-0 left-0 h-[5px] w-full bg-gray-200'>
+                <div className='h-full bg-blue-500' style={{ width: `${form.percentageComplete}%` }} />
+              </div> */}
+              <div className='bg-amber-500 w-full h-[200px]'>
+
+              </div>
+              <h4 className='mt-3 text-sm font-bold text-gray-600'>{form.name}</h4>
+              <div className='flex flex-col gap-1 text-xs text-gray-500 mt-2'>
+                <h5><span className='font-semibold'>Vote count:</span> 20,000</h5>
+                <h5><span className='font-semibold'>Last result update:</span> Oct. 5th 2025</h5>
+              </div>
+              {/* <p className='text-[10px] text-gray-500'>{form.questionCount} Sections - {form.percentageComplete}% complete</p> */}
+              <Button size="sm" className='w-full !text-[10px] mt-4 !px-2 !py-1 !bg-blue-100 !text-gray-500 !hover:bg-blue-200 !hover:text-blue-800'>View details</Button>
+              <div className='grid grid-cols-2 mt-2 gap-2'>
+                {/* <Button size="sm" className='w-full !text-[10px]'>Continue</Button> */}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
 
       <div className='col-span-6 row-span-2'>
-        <div className="col-span-6 flex flex-col p-4 border rounded-xl">
-          <h4 className="text-xs font-semibold text-gray-600">Continue Filling</h4>
+        {/* <div className="col-span-6 flex flex-col p-4 border rounded-xl">
+          <h4 className="text-xs font-semibold text-gray-600">Continue Voting</h4>
           <div className='overflow-x-auto mt-2'>
             <div className="gap-4 whitespace-nowrap">
               {pendingForms.map((form, index) => (
@@ -78,9 +135,9 @@ export function Home() {
               ))}
             </div>
           </div>
-        </div>
+        </div> */}
 
-        <div className="col-span-6 flex flex-col mt-6">
+        {/* <div className="col-span-6 flex flex-col mt-6">
           <h4 className="text-xs font-semibold text-gray-600">Submitted Forms</h4>
           <div className='grid grid-cols-4 gap-4 mt-2'>
             {pendingForms.map((form, index) => (
@@ -94,10 +151,10 @@ export function Home() {
               </Container>
             ))}
           </div>
-        </div>
+        </div> */}
       </div> 
 
-      <PublishedByYou />
+      {/* <PublishedByYou /> */}
     </Container>
   )
 }

@@ -1,1 +1,1 @@
-export { Create as default } from "@/pages/create"
+export { CreateWelcome as default } from "@/features/create/pages"
