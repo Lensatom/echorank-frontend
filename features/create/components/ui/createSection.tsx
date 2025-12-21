@@ -4,7 +4,7 @@ import { Container } from '@/shared/components/layout'
 import { Button } from '@/shared/components/ui'
 import { Plus, X } from 'lucide-react'
 import { useContext, useState } from 'react'
-import { CreatePollContext, IPollSection } from '../context'
+import { CreatePollContext, IPollSection } from '../../context'
 
 interface ISectionProps {
   index: number
@@ -98,6 +98,8 @@ export function Section({
 
   const handleRemoveSection = () => {
     if (!pollData || !pollData.sections || !Array.isArray(pollData.sections)) return
+    // Prevent removing the last remaining section
+    if (pollData.sections.length <= 1) return
     const updatedSections = pollData.sections.filter((_, i) => i !== index)
     setPollData({
       ...pollData,
@@ -180,7 +182,8 @@ export function Section({
             type="button"
             size="sm"
             variant="outline"
-            className='text-xs text-gray-700 cursor-pointer'
+            className={`text-xs cursor-pointer ${pollData?.sections && pollData.sections.length <= 1 ? 'text-gray-400 border-gray-200 cursor-not-allowed' : 'text-gray-700'}`}
+            disabled={!!pollData?.sections && pollData.sections.length <= 1}
             onClick={handleRemoveSection}
           >
             <X />

@@ -1,0 +1,1 @@
+export { CreateArea as default } from "@/features/create/pages"

@@ -13,7 +13,8 @@ export interface IPollSection {
 
 export interface ICreatePoll {
   id: string
-  name: string
+  title: string
+  description: string
   createdAt: string
   lastModified: string
   sections: IPollSection[]

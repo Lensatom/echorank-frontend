@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid'
 
 interface IPollDraft {
   id: string
-  name: string
+  title: string
   createdAt: string
   lastModified: string
   preview: string
@@ -13,11 +13,12 @@ const POLL_DRAFTS_KEY = 'pollDrafts'
 const POLL_DATA_PREFIX = 'pollData_'
 
 export const draftUtils = {
-  createNewPoll: (name: string): ICreatePoll => {
+  createNewPoll: (title: string): ICreatePoll => {
     const now = new Date().toISOString()
     return {
       id: uuidv4(),
-      name: name.trim(),
+      title: title.trim(),
+      description: '',
       createdAt: now,
       lastModified: now,
       sections: [
@@ -49,7 +50,7 @@ export const draftUtils = {
     const preview = poll.sections[0]?.name || 'Untitled Section'
     const draftInfo: IPollDraft = {
       id: poll.id,
-      name: poll.name,
+      title: poll.title,
       createdAt: poll.createdAt,
       lastModified: updatedPoll.lastModified,
       preview

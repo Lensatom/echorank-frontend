@@ -1,0 +1,1 @@
+export { CreateComplete as default } from "@/features/create/pages"

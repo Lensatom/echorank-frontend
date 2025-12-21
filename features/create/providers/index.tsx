@@ -28,7 +28,7 @@ export function CreatePollProvider({ children }: { children: React.ReactNode }) 
       if (actualPollId) {
         const existingPoll = draftUtils.loadPoll(actualPollId)
         if (existingPoll) {
-          console.log('Found existing poll:', existingPoll.name)
+          console.log('Found existing poll:', existingPoll.title)
           setPollData(existingPoll)
           setIsNamed(true)
           setIsLoading(false)
@@ -69,7 +69,7 @@ export function CreatePollProvider({ children }: { children: React.ReactNode }) 
     }
 
     saveTimeoutRef.current = setTimeout(() => {
-      console.log('Auto-saving poll:', pollData.name)
+      console.log('Auto-saving poll:', pollData.title)
       savePollData(pollData)
     }, 500)
 
@@ -78,7 +78,7 @@ export function CreatePollProvider({ children }: { children: React.ReactNode }) 
         clearTimeout(saveTimeoutRef.current)
       }
     }
-  }, [pollData?.sections, isNamed, savePollData])
+  }, [pollData?.sections, pollData?.title, pollData?.description, isNamed, savePollData])
 
   const handlePollNamed = async (pollName: string) => {
     const newPoll = draftUtils.createNewPoll(pollName)
@@ -105,7 +105,7 @@ export function CreatePollProvider({ children }: { children: React.ReactNode }) 
     
     const existingPoll = draftUtils.loadPoll(pollId)
     if (existingPoll) {
-      console.log('Draft loaded:', existingPoll.name)
+      console.log('Draft loaded:', existingPoll.title)
       setPollData(existingPoll)
       setIsNamed(true)
       
