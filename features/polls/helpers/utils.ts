@@ -1,3 +1,5 @@
+import * as illustrations from "../assets"
+
 function hash53(str: string, seed = 0): number {
   let h1 = 0xdeadbeef ^ seed
   let h2 = 0x41c6ce57 ^ seed
@@ -15,4 +17,26 @@ function hash53(str: string, seed = 0): number {
 export const idToNumber = (id: string): 1|2|3|4|5|6|7|8|9|10 => {
   const h = hash53(id)
   return ((h % 10) + 1) as 1|2|3|4|5|6|7|8|9|10
+}
+
+
+export const getPollImage = (id: string): string => {
+
+  const illustrationMap: Record<
+    1|2|3|4|5|6|7|8|9|10,
+    string
+  > = {
+    1: illustrations.ForestBro,
+    2: illustrations.ForestPana,
+    3: illustrations.ForestRafiki,
+    4: illustrations.HappySunRafiki,
+    5: illustrations.MangoTreeAmico,
+    6: illustrations.SpringFlowerCuate,
+    7: illustrations.SpringFlowerPana,
+    8: illustrations.StrelitziaPlantRafiki,
+    9: illustrations.SunsetPana,
+    10: illustrations.WindTurbineCuate,
+  }
+  const number: 1|2|3|4|5|6|7|8|9|10 = idToNumber(id) as 1|2|3|4|5|6|7|8|9|10
+  return illustrationMap[number]
 }
