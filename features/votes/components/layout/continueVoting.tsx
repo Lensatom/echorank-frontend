@@ -1,4 +1,4 @@
-import { VoteCard } from '@/features/votes/components/ui'
+import { VoteCard } from '../ui'
 
 const pendingForms = [
   {

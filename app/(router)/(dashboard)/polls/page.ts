@@ -1,0 +1,1 @@
+export { Polls as default } from "@/features/polls/pages"

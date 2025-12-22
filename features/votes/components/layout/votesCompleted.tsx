@@ -1,4 +1,4 @@
-import { VoteCard } from '@/features/votes/components/ui'
+import { VoteCard } from '../ui'
 
 const pendingForms = [
   {
@@ -23,10 +23,10 @@ const pendingForms = [
   }
 ]
 
-export function ContinueVoting({className}: {className?: string}) {
+export function VotesCompleted({className}: {className?: string}) {
   return (
     <section className={`${className}`}>
-      <h4 className="text-base font-bold text-gray-600">Continue voting</h4>
+      <h4 className="text-base font-bold text-gray-600">Votes completed</h4>
       <div className='mt-3 grid grid-cols-4 gap-x-3 gap-y-6'>
         {pendingForms.map((vote, index) => <VoteCard key={index} voteData={vote} />)}
       </div>

@@ -13,8 +13,8 @@ export function Sidebar({
 
   const routes = [
     { icon: Home, label: 'Home', route: '/home' },
-    { icon: Vote, label: 'Polls', route: '/history' },
-    { icon: AlignVerticalDistributeEnd, label: 'Votes', route: '/history' },
+    { icon: Vote, label: 'Polls', route: '/polls' },
+    { icon: AlignVerticalDistributeEnd, label: 'Votes', route: '/votes' },
     { icon: SquarePlus, label: 'Create', route: '/create' },
     { icon: BadgeInfo, label: 'Help', route: '/help' },
     { icon: User, label: 'Profile', route: '/profile' }
