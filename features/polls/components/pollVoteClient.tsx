@@ -1,0 +1,99 @@
+"use client"
+
+import React from 'react'
+import { Container } from '@/shared/components/layout'
+import type { IPoll, IPollSection, IPollOption } from '../interfaces'
+import { Section } from '../components/section'
+import type { DragOptionItem } from '../components/option'
+import { useParams, useRouter, useSearchParams } from 'next/navigation'
+import { Button } from '@/shared/components/ui'
+
+type SectionModel = {
+  sectionId: string
+  name: string
+  options: { optionId: string; name: string; imageUrl?: string }[]
+}
+
+interface PollVoteClientProps {
+  poll: IPoll
+}
+
+export default function PollVoteClient({ poll }: PollVoteClientProps) {
+  const searchParams = useSearchParams()
+  const page = Number(searchParams.get('page') || '1')
+  const section = poll.sections[page - 1]
+  const pollLength = poll.sections.length
+  const isLastPage = page === pollLength
+  const percentageComplete = (page / pollLength) * 100
+
+  const sectionModels: SectionModel[] = React.useMemo(() => {
+    return (poll.sections || []).map((section: IPollSection, idx: number) => ({
+      sectionId: `${poll.id}-section-${idx}`,
+      name: section.name,
+      options: (section.options || []).map((opt: IPollOption) => ({
+        optionId: opt.optionId,
+        name: opt.name,
+      })),
+    }))
+  }, [poll])
+
+  const [rankings, setRankings] = React.useState<Record<string, DragOptionItem[]>>(() => {
+    const initial: Record<string, DragOptionItem[]> = {}
+    sectionModels.forEach((s) => {
+      initial[s.sectionId] = []
+    })
+    return initial
+  })
+
+  const changeRankings = React.useCallback(
+    (payload: { sectionId: string; ranking: DragOptionItem[] }) => {
+      setRankings((prev) => ({ ...prev, [payload.sectionId]: payload.ranking }))
+    },
+    []
+  )
+
+  const goToNextSection = () => {
+    if (isLastPage) {
+      // Submit poll logic here
+      console.log('Submitting poll with rankings:', rankings)
+      return
+    }
+    if (page < pollLength) {
+      const nextPage = page + 1
+      const params = new URLSearchParams(window.location.search)
+      params.set('page', nextPage.toString())
+      const newUrl = `${window.location.pathname}?${params.toString()}`
+      window.history.pushState({}, '', newUrl)
+    }
+  }
+
+  return (
+    <Container className="h-screen grid grid-rows-8 !pt-3">
+      <div className='row-span-1'>
+        <h1 className="text-xl font-extrabold text-gray-800">{poll.title}</h1>
+        <div className='w-full h-2 bg-white rounded-full mt-3'>
+          <div className='h-full bg-blue-500 rounded-full' style={{ width: `${percentageComplete}%` }}></div>
+        </div>
+        <div className='mt-3 flex items-center justify-between'>
+          <div>
+            <h1 className="text-base font-bold text-gray-600">Section {page} of {pollLength}</h1>
+            <p className='text-xs text-gray-400'>{percentageComplete.toFixed(0)}% complete</p>
+          </div>
+          <div className='flex space-x-2'>
+            {page !== 1 && (<Button size="sm" className='!w-22 bg-gray-200 text-gray-700'>Previous</Button>)}
+            <Button size="sm" className='!w-22' onClick={goToNextSection}>{isLastPage ? 'Submit' : 'Next'}</Button>
+          </div>
+        </div>
+      </div>
+
+      <div className="row-span-7 mt-6 h-full flex flex-col gap-6 py-3">
+        <Section
+          key={section.sectionId}
+          section={section}
+          ranking={rankings[section.sectionId] || []}
+          changeRankings={changeRankings}
+        />
+      </div>
+    </Container>
+  )
+}

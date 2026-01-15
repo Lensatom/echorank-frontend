@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { useDrag } from 'react-dnd';
+import { IPollOption } from '../interfaces';
 
 export interface DragOptionItem {
   name: string,
@@ -9,10 +10,7 @@ export interface DragOptionItem {
 }
 
 interface IOptionProps {
-  option: {
-    optionId: string
-    name: string
-  },
+  option: IPollOption
   sectionId: string
 }
 
