@@ -2,7 +2,7 @@ import { Container } from '@/shared/components/layout'
 import { GET } from '@/shared/config/api/crud'
 import { decryptId } from '@/shared/helpers/general'
 import { IPoll } from '../interfaces'
-import PollVoteClient from '@/features/polls/components/pollVoteClient'
+import PollVoteClient from '@/features/polls/components/layout/pollVoteClient'
 
 export async function PollVoteArea({id}: { id: string }) {
   const decryptedId = decryptId(id)

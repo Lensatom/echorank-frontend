@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useDrag } from 'react-dnd';
-import { IPollOption } from '../interfaces';
+import { IPollOption } from '../../interfaces';
 
 export interface DragOptionItem {
   optionId: string,

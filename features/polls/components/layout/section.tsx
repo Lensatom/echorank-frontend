@@ -5,11 +5,11 @@ import { Input } from '@/shared/components/ui';
 import React from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { Option } from './option';
-import DropZone from './dropZone';
-import type { DragOptionItem } from './option';
+import { Option } from '../ui/option';
+import DropZone from '../ui/dropZone';
+import type { DragOptionItem } from '../ui/option';
 import { X } from 'lucide-react';
-import { IPollSection } from '../interfaces';
+import { IPollSection } from '../../interfaces';
 
 interface ISectionProps {
   section: IPollSection,

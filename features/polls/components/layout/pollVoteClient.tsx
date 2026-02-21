@@ -4,10 +4,10 @@ import { Container } from '@/shared/components/layout'
 import { Button } from '@/shared/components/ui'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useCallback, useMemo, useState } from 'react'
-import type { DragOptionItem } from '../components/option'
-import { Section } from '../components/section'
-import type { IPoll } from '../interfaces'
-import { usePostVote } from '../api'
+import type { DragOptionItem } from '../ui/option'
+import { Section } from './section'
+import type { IPoll } from '../../interfaces'
+import { usePostVote } from '../../api'
 
 interface PollVoteClientProps {
   poll: IPoll
