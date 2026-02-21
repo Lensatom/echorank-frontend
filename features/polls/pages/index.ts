@@ -1,3 +1,5 @@
 export { PollDetails } from './pollDetails'
 export { Polls } from './polls'
 export { PollVoteArea } from './pollVoteArea'
+export { default as PollVoteComplete } from './pollVoteComplete'
+export { default as PollResult } from './pollResult'

@@ -2,9 +2,8 @@ import { Container } from "@/shared/components/layout"
 import { GET } from "@/shared/config/api/crud"
 import { decryptId } from "@/shared/helpers/general"
 import Image from "next/image"
-import { getPollImage } from "../helpers/utils"
-import { Button } from "@/shared/components/ui"
 import Link from "next/link"
+import { getPollImage } from "../helpers/utils"
 
 export async function PollDetails({ id } : { id: string }) {
   const decryptedId = decryptId(id)
@@ -49,9 +48,14 @@ export async function PollDetails({ id } : { id: string }) {
           <h1 className="text-2xl font-bold text-gray-800 mt-6">{pollData.title}</h1>
           <p className="text-xs text-gray-600">By Kehinde Iyanu &bull; Contains {pollData.sections.length} sections</p>
           <p className="text-sm mt-2">{pollData.description}</p>
-          <Link href={`/polls/${id}/vote`} className="mt-6 w-full bg-blue-500 text-white rounded-md text-sm font-medium p-3">
-            Start voting now
-          </Link>
+          <div className="flex gap-3 mt-6 w-full">
+            <Link href={`/polls/${id}/vote`} className="w-full bg-blue-500 text-white rounded-md text-sm font-medium p-2">
+              Start voting now
+            </Link>
+            <Link href={`/polls/${id}/result`} className="w-full border !border-blue-500 text-blue-500 rounded-md text-sm font-medium p-2">
+              View results
+            </Link>
+          </div>
           <p className="text-[10px] mt-4 text-gray-500">Created on Oct. 23rd 2025</p>
         </div>
       </div>

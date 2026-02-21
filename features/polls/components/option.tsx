@@ -5,7 +5,7 @@ import { useDrag } from 'react-dnd';
 import { IPollOption } from '../interfaces';
 
 export interface DragOptionItem {
-  name: string,
+  optionId: string,
   optionName: string
 }
 
@@ -18,7 +18,7 @@ export function Option({
   option,
 }: IOptionProps) {
   const dragItem: DragOptionItem = React.useMemo(() => (
-    { name: option.optionId, optionName: option.name }),
+    { optionId: option.optionId, optionName: option.name }),
     [option.optionId, option.name]
   )
 

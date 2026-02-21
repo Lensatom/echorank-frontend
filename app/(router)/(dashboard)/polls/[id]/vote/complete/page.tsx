@@ -1,0 +1,1 @@
+export { PollVoteComplete as default } from "@/features/polls/pages"

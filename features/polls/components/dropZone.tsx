@@ -14,9 +14,16 @@ const DropZone = ({
 
   const [{ isOver }, drop] = useDrop(() => ({
     accept: 'item',
-    drop: (item: DragOptionItem) => onDrop(item),
+    drop: (item: DragOptionItem, monitor) => {
+      if (monitor.didDrop()) {
+        return undefined;
+      }
+
+      onDrop(item);
+      return { handled: true };
+    },
     collect: (monitor) => ({
-      isOver: monitor.isOver(),
+      isOver: monitor.isOver({ shallow: true }),
     }),
   }));
 

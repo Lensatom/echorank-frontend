@@ -14,7 +14,7 @@ export const useGetPollById = ({ id }: { id: string }) => {
 
 export const usePostVote = () => {
   const { mutateAsync: postVote, ...rest } = useMutation({
-    mutationFn: async ({id, data} : {id: string, data: {sections: {sectionId: string, ranking: string[]}}}) => {
+    mutationFn: async ({id, data} : {id: string, data: {sections: {sectionId: string, ranking: string[]}[]}}) => {
       const res = await POST({
         route: `/polls/${id}/vote`,
         data,

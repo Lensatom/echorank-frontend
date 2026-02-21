@@ -9,12 +9,15 @@ import { Option } from './option';
 import DropZone from './dropZone';
 import type { DragOptionItem } from './option';
 import { X } from 'lucide-react';
-import { IPollOption, IPollSection } from '../interfaces';
+import { IPollSection } from '../interfaces';
 
 interface ISectionProps {
   section: IPollSection,
   ranking: DragOptionItem[],
-  changeRankings: (newRankings:any) => void
+  changeRankings: (
+    sectionId: string,
+    rankingUpdate: DragOptionItem[] | ((currentRanking: DragOptionItem[]) => DragOptionItem[])
+  ) => void
 }
 
 export function Section({
@@ -25,9 +28,8 @@ export function Section({
 
   const [searchTerm, setSearchTerm] = React.useState('')
 
-  // Derive available options from original options minus ranked items
   const availableOptions = React.useMemo(() => (
-    section.options.filter(opt => !ranking.some(r => r.name === opt.optionId))
+    section.options.filter(opt => !ranking.some(r => r.optionId === opt.optionId))
   ), [section.options, ranking])
 
   const filteredOptions = React.useMemo(() => (
@@ -35,23 +37,31 @@ export function Section({
       .filter(option => option.name.toLowerCase().includes(searchTerm.toLowerCase()))
       .sort((a, b) => a.name.localeCompare(b.name))
   ), [availableOptions, searchTerm])
-
-  const newRanking = [...ranking];
+  
   
   const handleDrop = (item: DragOptionItem, index: number) => {
-    newRanking.splice(index, 0, item);
+    changeRankings(section.sectionId, (currentRanking) => {
+      const newRanking = [...currentRanking];
+      const existingIndex = newRanking.findIndex(rankedItem => rankedItem.optionId === item.optionId);
+      let insertionIndex = index;
 
-    changeRankings({
-      sectionId: section.sectionId,
-      ranking: newRanking
+      if (existingIndex !== -1) {
+        newRanking.splice(existingIndex, 1);
+        if (existingIndex < insertionIndex) {
+          insertionIndex -= 1;
+        }
+      }
+
+      newRanking.splice(insertionIndex, 0, item);
+      return newRanking;
     });
   };
 
   const handleRemoveItem = (index: number) => {
-    newRanking.splice(index, 1);
-    changeRankings({
-      sectionId: section.sectionId,
-      ranking: newRanking
+    changeRankings(section.sectionId, (currentRanking) => {
+      const newRanking = [...currentRanking];
+      newRanking.splice(index, 1);
+      return newRanking;
     });
   };
 
@@ -64,16 +74,19 @@ export function Section({
         </p>
 
         <div className='h-[92%] grid grid-cols-2 gap-4'>
+          
           <Container className='h-full !px-4 !py-0 border rounded-md overflow-y-auto mt-3'>
             {/* <p className='text-xs font-semibold p-2 mt-2 rounded-md bg-green-100 text-green-600'>Ranking</p> */}
             <div className='min-h-[200px] w-full'>
               <DropZone full={ranking.length === 0} onDrop={(item) => handleDrop(item, 0)} />
               {ranking.length === 0 ? (
-                <p className='text-xs text-gray-600 text-center mt-4'>Drag options here to rank them</p>
+                <p key="empty-ranking" className='text-xs text-gray-600 text-center mt-4'>
+                  Drag options here to rank them
+                </p>
               ) : (
                 <ul>
                   {ranking.map((item, index) => (
-                    <React.Fragment key={`${item.name}-${index}`}>
+                    <React.Fragment key={item.optionId}>
                       <div className='text-sm flex items-center justify-between bg-gray-200 p-4'>
                         <p>{item.optionName}</p>
                         <button onClick={() => handleRemoveItem(index)}>
@@ -82,11 +95,12 @@ export function Section({
                       </div>
                       <DropZone onDrop={(item) => handleDrop(item, index + 1)} />
                     </React.Fragment>
-                ))}
+                  ))}
                 </ul>
               )}
             </div>
           </Container>
+
           <Container className='h-full !p-4 border rounded-md overflow-y-auto mt-3'>
             {/* <p className='text-xs font-semibold p-2 rounded-md bg-yellow-100 text-yellow-600'>Options</p> */}
             <p className='text-xs mt-3 text-gray-500'>
@@ -102,6 +116,7 @@ export function Section({
               ))}
             </div>
           </Container>
+
         </div>
       </Container>
     </DndProvider>

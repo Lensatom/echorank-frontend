@@ -1,24 +1,22 @@
 "use client"
 
-import React from 'react'
 import { Container } from '@/shared/components/layout'
-import type { IPoll, IPollSection, IPollOption } from '../interfaces'
-import { Section } from '../components/section'
-import type { DragOptionItem } from '../components/option'
-import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { Button } from '@/shared/components/ui'
-
-type SectionModel = {
-  sectionId: string
-  name: string
-  options: { optionId: string; name: string; imageUrl?: string }[]
-}
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useCallback, useMemo, useState } from 'react'
+import type { DragOptionItem } from '../components/option'
+import { Section } from '../components/section'
+import type { IPoll } from '../interfaces'
+import { usePostVote } from '../api'
 
 interface PollVoteClientProps {
   poll: IPoll
 }
 
+type RankingUpdate = DragOptionItem[] | ((currentRanking: DragOptionItem[]) => DragOptionItem[])
+
 export default function PollVoteClient({ poll }: PollVoteClientProps) {
+  const router = useRouter()
   const searchParams = useSearchParams()
   const page = Number(searchParams.get('page') || '1')
   const section = poll.sections[page - 1]
@@ -26,37 +24,30 @@ export default function PollVoteClient({ poll }: PollVoteClientProps) {
   const isLastPage = page === pollLength
   const percentageComplete = (page / pollLength) * 100
 
-  const sectionModels: SectionModel[] = React.useMemo(() => {
-    return (poll.sections || []).map((section: IPollSection, idx: number) => ({
-      sectionId: `${poll.id}-section-${idx}`,
-      name: section.name,
-      options: (section.options || []).map((opt: IPollOption) => ({
-        optionId: opt.optionId,
-        name: opt.name,
-      })),
-    }))
+  const { postVote, isPending } = usePostVote()
+
+  const sectionsForRankings = useMemo(() => {
+    const rankingObj: Record<string, DragOptionItem[]> = {}
+    poll.sections.forEach(section => {
+      rankingObj[section.sectionId] = []
+    })
+    return rankingObj
   }, [poll])
 
-  const [rankings, setRankings] = React.useState<Record<string, DragOptionItem[]>>(() => {
-    const initial: Record<string, DragOptionItem[]> = {}
-    sectionModels.forEach((s) => {
-      initial[s.sectionId] = []
-    })
-    return initial
-  })
+  const [rankings, setRankings] = useState<Record<string, DragOptionItem[]>>(sectionsForRankings)
 
-  const changeRankings = React.useCallback(
-    (payload: { sectionId: string; ranking: DragOptionItem[] }) => {
-      setRankings((prev) => ({ ...prev, [payload.sectionId]: payload.ranking }))
-    },
-    []
-  )
+  const changeRankings = (sectionId: string, rankingUpdate: RankingUpdate) => {
+    setRankings(prev => ({
+      ...prev,
+      [sectionId]: typeof rankingUpdate === 'function'
+        ? rankingUpdate(prev[sectionId] ?? [])
+        : rankingUpdate
+    }))
+  }
 
-  const goToNextSection = () => {
+  const goToNextSection = useCallback(() => {
     if (isLastPage) {
-      // Submit poll logic here
-      console.log('Submitting poll with rankings:', rankings)
-      return
+      handleSubmit()
     }
     if (page < pollLength) {
       const nextPage = page + 1
@@ -65,6 +56,22 @@ export default function PollVoteClient({ poll }: PollVoteClientProps) {
       const newUrl = `${window.location.pathname}?${params.toString()}`
       window.history.pushState({}, '', newUrl)
     }
+  }, [page, pollLength, isLastPage, rankings])
+
+  const handleSubmit = async () => {
+    const sectionIds = Object.keys(rankings)
+    const payload: {sectionId: string, ranking: string[]}[] = []
+    sectionIds.forEach(sectionId => {
+      console.log("Processing rankings", rankings)
+      const rankedOptions = rankings[sectionId]
+      console.log("Ranked options for section", sectionId, rankedOptions)
+      payload.push({
+        sectionId,
+        ranking: rankedOptions.map(opt => opt.optionId)
+      })
+    })
+    await postVote({ id: poll._id, data: { sections: payload } })
+    router.push(`/polls/${poll._id}/vote/complete`)
   }
 
   return (
@@ -81,7 +88,7 @@ export default function PollVoteClient({ poll }: PollVoteClientProps) {
           </div>
           <div className='flex space-x-2'>
             {page !== 1 && (<Button size="sm" className='!w-22 bg-gray-200 text-gray-700'>Previous</Button>)}
-            <Button size="sm" className='!w-22' onClick={goToNextSection}>{isLastPage ? 'Submit' : 'Next'}</Button>
+            <Button size="sm" className='!w-22' isLoading={isPending} onClick={goToNextSection}>{isLastPage ? 'Submit' : 'Next'}</Button>
           </div>
         </div>
       </div>
@@ -90,7 +97,7 @@ export default function PollVoteClient({ poll }: PollVoteClientProps) {
         <Section
           key={section.sectionId}
           section={section}
-          ranking={rankings[section.sectionId] || []}
+          ranking={rankings[section.sectionId] ?? []}
           changeRankings={changeRankings}
         />
       </div>
