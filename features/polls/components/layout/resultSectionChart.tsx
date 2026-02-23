@@ -22,29 +22,29 @@ ChartJS.register(
 )
 
 interface ResultSectionChartProps {
-  sectionData?: {
-    sectionName?: string
-    options?: Array<{
-      optionId: string
-      name: string
-      votes?: number
-    }>
-  }
+  sectionData: Record<string, Record<string, string>>
 }
 
 function ResultSectionChart({ sectionData }: ResultSectionChartProps) {
-  const chartData = sectionData?.options || [
-    { optionId: '1', name: 'Option A', votes: 12 },
-    { optionId: '2', name: 'Option B', votes: 19 },
-    { optionId: '3', name: 'Option C', votes: 8 },
-    { optionId: '4', name: 'Option D', votes: 15 }
-  ]
+
+  console.log('Rendering ResultSectionChart with sectionData:', sectionData)
+
+  const sectionId:string = Object.keys(sectionData)[0]
+  const rankIds = Object.keys(sectionData[sectionId])
+
+  const chartData = rankIds.map(rankId => {
+    return {
+      optionId: rankId,
+      name: rankId,
+      votes: sectionData[sectionId][rankId]
+    }
+  })
 
   const data = {
     labels: chartData.map(opt => opt.name),
     datasets: [
       {
-        label: 'Votes',
+        label: 'Rank Index',
         data: chartData.map(opt => opt.votes || 0),
         backgroundColor: [
           'rgba(59, 130, 246, 0.7)',
@@ -65,17 +65,17 @@ function ResultSectionChart({ sectionData }: ResultSectionChartProps) {
   }
 
   const options = {
-    indexAxis: 'y' as const,
+    indexAxis: 'x' as const,
     responsive: true,
     maintainAspectRatio: true,
     plugins: {
       legend: {
         display: true,
-        position: 'top' as const
+        position: 'top' as const,
       },
       title: {
         display: true,
-        text: sectionData?.sectionName || 'Ranking Results'
+        text: sectionId
       }
     },
     scales: {
@@ -86,7 +86,7 @@ function ResultSectionChart({ sectionData }: ResultSectionChartProps) {
   }
 
   return (
-    <div className='w-full h-96'>
+    <div className='w-full p-6 flex justify-center items-center'>
       <Bar data={data} options={options} />
     </div>
   )

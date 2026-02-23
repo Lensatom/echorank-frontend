@@ -18,10 +18,10 @@ async function PollResult({ id } : { id: string }) {
       <div className="min-h-screen p-8 bg-gray-50">
         <h1 className="text-3xl font-bold text-gray-800 mb-8">Poll Results</h1>
         
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid  gap-8">
           {sections.length > 0 ? (
             sections.map((section: any) => (
-              <div key={section.sectionId} className="bg-white rounded-lg shadow-md p-6">
+              <div key={section.sectionId} className="w-full bg-white rounded-lg shadow-md p-6">
                 <ResultSectionChart sectionData={section} />
               </div>
             ))
