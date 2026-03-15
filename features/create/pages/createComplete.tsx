@@ -6,6 +6,7 @@ import { encryptId } from '@/shared/helpers/general'
 import { CheckCircle2, Copy } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import { toast } from 'sonner'
 
 interface PublishedSummary {
   id?: string
@@ -17,7 +18,7 @@ interface PublishedSummary {
 export function CreateComplete() {
   const router = useRouter()
   const [summary, setSummary] = useState<PublishedSummary | null>(null)
-  const encodedId = summary?.id ? encryptId(summary.id) : null
+  const encryptedId = summary?.id ? encryptId(summary.id) : null
 
   useEffect(() => {
     try {
@@ -30,17 +31,19 @@ export function CreateComplete() {
 
   const viewPoll = () => {
     if (summary?.id) {
-      router.push(`/polls/${encodedId}`)
+      router.push(`/polls/${encryptedId}`)
     } else {
       router.push('/home')
     }
   }
 
   const handleCopyLink = () => {
-    const url = summary?.id ? `${window.location.origin}/polls/${encodedId}` : window.location.origin
+    const url = summary?.id ? `${window.location.origin}/polls/${encryptedId}` : window.location.origin
     navigator.clipboard.writeText(url)
-      .then(() => alert('Poll link copied to clipboard!'))
-      .catch(() => alert('Failed to copy link. Please try manually copying: ' + url))
+      .then(() => toast.success('Poll link copied to clipboard'))
+      .catch(() => toast.error('Failed to copy link. Please copy manually.', {
+        description: url
+      }))
   }
 
   return (

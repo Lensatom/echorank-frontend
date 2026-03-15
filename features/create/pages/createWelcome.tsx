@@ -4,6 +4,7 @@ import { Container } from '@/shared/components/layout'
 import { Button } from '@/shared/components/ui'
 import { Trash } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { toast } from 'sonner'
 import { CreatePollForm } from '../components/layouts'
 import { draftUtils } from '../utils/draftUtils'
 
@@ -15,10 +16,21 @@ export function CreateWelcome() {
   }, [])
 
   const handleDeleteDraft = (id: string) => {
-    const confirmed = typeof window !== 'undefined' ? window.confirm('Delete this draft? This cannot be undone.') : true
-    if (!confirmed) return
-    draftUtils.deletePoll(id)
-    setDrafts(prev => prev.filter(d => d.id !== id))
+    toast.warning('Delete this draft?', {
+      description: 'This action cannot be undone.',
+      action: {
+        label: 'Delete',
+        onClick: () => {
+          draftUtils.deletePoll(id)
+          setDrafts(prev => prev.filter(d => d.id !== id))
+          toast.success('Draft deleted')
+        }
+      },
+      cancel: {
+        label: 'Cancel',
+        onClick: () => {}
+      }
+    })
   }
 
   return (
