@@ -18,6 +18,7 @@ interface PublishedSummary {
 export function CreateComplete() {
   const router = useRouter()
   const [summary, setSummary] = useState<PublishedSummary | null>(null)
+  console.log('Summary data on completion screen:', summary)
   const encryptedId = summary?.id ? encryptId(summary.id) : null
 
   useEffect(() => {

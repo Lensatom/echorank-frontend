@@ -53,7 +53,7 @@ function CreateAreaContent() {
       // Store minimal summary for completion screen
       try {
         const published = {
-          id: (res as any)?.data?.id ?? pollData.id,
+          id: (res as any)?.data?.poll?._id ?? pollData.id,
           title: pollData.title,
           description: pollData.description,
           sectionsCount: Array.isArray(pollData.sections) ? pollData.sections.length : 0,
