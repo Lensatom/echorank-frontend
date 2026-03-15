@@ -1,10 +1,11 @@
 "use client"
 
 import { Container } from '@/shared/components/layout'
-import { CreatePollForm } from '../components/layouts'
-import { useEffect, useState } from 'react'
-import { draftUtils } from '../utils/draftUtils'
 import { Button } from '@/shared/components/ui'
+import { Trash } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { CreatePollForm } from '../components/layouts'
+import { draftUtils } from '../utils/draftUtils'
 
 export function CreateWelcome() {
   const [drafts, setDrafts] = useState<Array<{ id: string; title: string; createdAt: string; lastModified: string; preview: string }>>([])
@@ -21,14 +22,13 @@ export function CreateWelcome() {
   }
 
   return (
-    <Container className='min-h-screen w-full grid grid-rows-2'>
-      <section className='w-full flex flex-col items-center justify-center '>
+    <Container className='h-screen w-full grid grid-rows-2'>
+      <section className='w-full flex flex-col items-center justify-center mt-4'>
         <h1 className='text-3xl font-bold text-blue-500'>Create Poll</h1>
-        <p className='text-gray-600 font-medium text-sm mt-2'>Name a new Poll or continue existing drafts</p>
+        <p className='text-gray-600 font-medium text-sm mt-1'>Name a new Poll or continue existing drafts</p>
         <CreatePollForm />
-        <hr className='w-1/2 mt-12' />
       </section>
-      <section className='flex flex-col gap-4 border border-gray-400 rounded-md p-6 w-[60%] mx-auto'>
+      <section className='flex flex-col gap-4 border border-gray-400 rounded-md p-6 w-[60%] overflow-y-auto mx-auto'>
         <h3 className='text-sm text-gray-600 font-bold'>Your drafts</h3>
         {drafts.length === 0 && (
           <p className='text-xs text-gray-500'>No drafts yet. Create a new poll above.</p>
@@ -42,7 +42,9 @@ export function CreateWelcome() {
             </div>
             <div className='flex gap-2'>
               <Button size='sm' variant='outline' onClick={() => (window.location.href = `/create/${d.id}`)}>Continue</Button>
-              <Button size='sm' variant='outline' className='text-red-600 border-red-200 hover:bg-red-50' onClick={() => handleDeleteDraft(d.id)}>Delete</Button>
+              <Button size='sm' variant='outline' className='text-red-600 border-red-200 hover:bg-red-50' onClick={() => handleDeleteDraft(d.id)}>
+                <Trash />
+              </Button>
             </div>
           </div>
         ))}

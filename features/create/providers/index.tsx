@@ -2,13 +2,14 @@
 
 import { usePathname, useSearchParams } from 'next/navigation'
 import React, { useEffect, useState, useRef, useCallback } from 'react'
-import { CreatePollContext, ICreatePoll } from '../context'
+import { CreatePollContext, ICreatePoll, SaveStatus } from '../context'
 import { draftUtils } from '../utils/draftUtils'
 
 export function CreatePollProvider({ children }: { children: React.ReactNode }) {
   const [pollData, setPollData] = useState<ICreatePoll | null>(null)
   const [isNamed, setIsNamed] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
+  const [saveStatus, setSaveStatus] = useState<SaveStatus>('saved')
   const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const isSavingRef = useRef(false)
   const pathname = usePathname()
@@ -31,6 +32,7 @@ export function CreatePollProvider({ children }: { children: React.ReactNode }) 
           console.log('Found existing poll:', existingPoll.title)
           setPollData(existingPoll)
           setIsNamed(true)
+          setSaveStatus('saved')
           setIsLoading(false)
           return
         } else {
@@ -41,6 +43,7 @@ export function CreatePollProvider({ children }: { children: React.ReactNode }) 
       console.log('No poll ID or poll not found, showing naming form')
       setPollData(null)
       setIsNamed(false)
+      setSaveStatus('saved')
       setIsLoading(false)
     }
 
@@ -49,20 +52,31 @@ export function CreatePollProvider({ children }: { children: React.ReactNode }) 
 
   const savePollData = useCallback((pollToSave: ICreatePoll) => {
     if (isSavingRef.current) return
-    
+
     isSavingRef.current = true
-    const updatedPoll = {
-      ...pollToSave,
-      lastModified: new Date().toISOString()
+    setSaveStatus('saving')
+
+    try {
+      const updatedPoll = {
+        ...pollToSave,
+        lastModified: new Date().toISOString()
+      }
+
+      draftUtils.savePoll(updatedPoll)
+      setPollData(updatedPoll)
+      setSaveStatus('saved')
+    } catch (error) {
+      console.error('Failed to save draft:', error)
+      setSaveStatus('error')
+    } finally {
+      isSavingRef.current = false
     }
-    
-    draftUtils.savePoll(updatedPoll)
-    setPollData(updatedPoll)
-    isSavingRef.current = false
   }, [])
 
   useEffect(() => {
     if (!pollData || !isNamed || isSavingRef.current) return
+
+    setSaveStatus('unsaved')
 
     if (saveTimeoutRef.current) {
       clearTimeout(saveTimeoutRef.current)
@@ -86,8 +100,9 @@ export function CreatePollProvider({ children }: { children: React.ReactNode }) 
     
     setPollData(newPoll)
     setIsNamed(true)
-    
+
     draftUtils.savePoll(newPoll)
+    setSaveStatus('saved')
     console.log('Poll saved to localStorage')
     
     await new Promise(resolve => setTimeout(resolve, 100))
@@ -108,6 +123,7 @@ export function CreatePollProvider({ children }: { children: React.ReactNode }) 
       console.log('Draft loaded:', existingPoll.title)
       setPollData(existingPoll)
       setIsNamed(true)
+      setSaveStatus('saved')
       
       if (typeof window !== 'undefined') {
         const newUrl = `${window.location.pathname}?id=${pollId}`
@@ -125,6 +141,7 @@ export function CreatePollProvider({ children }: { children: React.ReactNode }) 
     <CreatePollContext.Provider value={{ 
       pollData, 
       setPollData, 
+      saveStatus,
       isNamed, 
       setIsNamed,
       handlePollNamed,

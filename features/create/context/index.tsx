@@ -20,9 +20,12 @@ export interface ICreatePoll {
   sections: IPollSection[]
 }
 
+export type SaveStatus = 'saved' | 'saving' | 'unsaved' | 'error'
+
 interface IPollDataContext {
   pollData: ICreatePoll | null
   setPollData: React.Dispatch<React.SetStateAction<ICreatePoll | null>>
+  saveStatus: SaveStatus
   isNamed: boolean
   setIsNamed: React.Dispatch<React.SetStateAction<boolean>>
   handlePollNamed: (pollName: string) => Promise<void>
