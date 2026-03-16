@@ -22,21 +22,26 @@ ChartJS.register(
 )
 
 interface ResultSectionChartProps {
-  sectionData: Record<string, Record<string, string>>
+  sectionResult: Record<string, Record<string, string>>,
+  sectionData: any
 }
 
-function ResultSectionChart({ sectionData }: ResultSectionChartProps) {
+function ResultSectionChart({
+  sectionResult,
+  sectionData
+}: ResultSectionChartProps) {
 
-  console.log('Rendering ResultSectionChart with sectionData:', sectionData)
+  console.log('Section result data:', sectionResult)
+  console.log('Section data:', sectionData)
 
-  const sectionId:string = Object.keys(sectionData)[0]
-  const rankIds = Object.keys(sectionData[sectionId])
+  const sectionId:string = Object.keys(sectionResult)[0]
+  const rankIds = Object.keys(sectionResult[sectionId])
 
   const chartData = rankIds.map(rankId => {
     return {
       optionId: rankId,
-      name: rankId,
-      votes: sectionData[sectionId][rankId]
+      name: sectionData.options.find((opt: any) => opt.optionId === rankId)?.name || `Option ${rankId}`,
+      votes: sectionResult[sectionId][rankId]
     }
   })
 
@@ -75,7 +80,7 @@ function ResultSectionChart({ sectionData }: ResultSectionChartProps) {
       },
       title: {
         display: true,
-        text: sectionId
+        text: `Visualization`,
       }
     },
     scales: {
@@ -86,7 +91,7 @@ function ResultSectionChart({ sectionData }: ResultSectionChartProps) {
   }
 
   return (
-    <div className='w-full p-6 flex justify-center items-center'>
+    <div className='flex justify-center items-center'>
       <Bar data={data} options={options} />
     </div>
   )
