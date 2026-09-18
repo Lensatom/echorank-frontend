@@ -11,6 +11,7 @@ import {
   Tooltip,
   Legend
 } from 'chart.js'
+import { text } from 'stream/consumers'
 
 ChartJS.register(
   CategoryScale,
@@ -78,10 +79,6 @@ function ResultSectionChart({
         display: true,
         position: 'top' as const,
       },
-      title: {
-        display: true,
-        text: `Visualization`,
-      }
     },
     scales: {
       x: {
@@ -91,7 +88,7 @@ function ResultSectionChart({
   }
 
   return (
-    <div className='flex justify-center items-center'>
+    <div>
       <Bar data={data} options={options} />
     </div>
   )
